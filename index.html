@@ -616,7 +616,7 @@ canvas{display:block;}
 
 <!-- ══ BUDGET ═════════════════════════════════════════════════════════════ -->
 <div class="page" id="page-budget">
-  <div class="section-title"><span>🎯</span> Monthly Budgets</div>
+  <div class="section-title"><span>🎯</span> Monthly Budgets <span style="margin-left:auto;font-size:11px;font-weight:600;color:var(--gold);cursor:pointer;" onclick="switchTab('bills')">📅 Bills →</span></div>
 
   <div class="card">
     <div class="card-title">Spending Limits — <span id="budget-month-label" style="color:var(--gold-lt);"></span></div>
@@ -748,8 +748,8 @@ canvas{display:block;}
   <button class="tab-btn" data-page="budget" onclick="switchTab('budget')">
     <span class="tab-icon">🎯</span><span>Budget</span>
   </button>
-  <button class="tab-btn" data-page="bills" onclick="switchTab('bills')">
-    <span class="tab-icon">📅</span><span>Bills</span>
+  <button class="tab-btn" data-page="goals" onclick="switchTab('goals')">
+    <span class="tab-icon">⭐</span><span>Goals</span>
   </button>
   <button class="tab-btn" data-page="reports" onclick="switchTab('reports')">
     <span class="tab-icon">📊</span><span>Reports</span>
@@ -808,13 +808,13 @@ const STORE = {
   bills:     'hf_bills_v1',
 };
 
-function load(k)  { try { return JSON.parse(localStorage.getItem(k)) || null; } catch { return null; } }
+function load(k)  { try { return JSON.parse(localStorage.getItem(k)) || null; } catch(e) { return null; } }
 function save(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
 
 let entries   = load(STORE.entries)   || [];  // [{id,date,type,category,amount,note,recurring}]
 let budgets   = load(STORE.budgets)   || {};  // {category: limitAmount}
 let goals     = load(STORE.goals)     || [];  // [{id,name,emoji,target,saved,deadline}]
-let settings  = load(STORE.settings)  || { currency:'KES', hidden:true };
+let settings  = load(STORE.settings)  || { currency:'KES', hidden:false };
 let recurring = load(STORE.recurring) || [];  // [{category,type,amount,note}]
 let bills     = load(STORE.bills)     || [];  // [{id,name,amount,dueDay,category,paid:[monthKey,...]}]
 
@@ -938,7 +938,7 @@ function toggleHide(){
   hidden = !hidden;
   settings.hidden = hidden;
   save(STORE.settings, settings);
-  document.getElementById('dash-eye').textContent = hidden ? '👁' : '🙈';
+  document.getElementById('dash-eye').textContent = hidden ? '🙈' : '👁';
   renderDash();
 }
 
