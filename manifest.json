@@ -1,0 +1,11 @@
+{
+  "name": "Household Finance",
+  "short_name": "H.Finance",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0F0F0F",
+  "theme_color": "#C8922A",
+  "icons": [
+    { "src": "images/bob.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
