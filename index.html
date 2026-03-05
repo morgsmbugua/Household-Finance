@@ -23,8 +23,100 @@ body{max-width:480px;margin:0 auto;padding-bottom:90px;overflow-x:hidden;-webkit
 input,button,select{font-family:'Sora',sans-serif;}
 button{cursor:pointer;}
 
+/* ── RESPONSIVE LAYOUT ── */
+@media(min-width:768px){
+  html,body{height:100%;overflow:hidden;}
+  body{max-width:100%;padding-bottom:0;display:flex;flex-direction:column;}
+
+  .app-layout{
+    display:flex;
+    flex-direction:row;
+    flex:1;
+    overflow:hidden;
+    height:calc(100vh - 53px);
+  }
+
+  /* Sidebar — reset ALL mobile overrides, then set as flex column */
+  .tabs{
+    position:relative !important;
+    bottom:auto !important;
+    left:auto !important;
+    top:auto !important;
+    right:auto !important;
+    transform:none !important;
+    z-index:1 !important;
+    max-width:none !important;
+    width:210px !important;
+    flex-shrink:0;
+    height:100%;
+    overflow-y:auto;
+    display:flex !important;
+    flex-direction:column !important;
+    grid-template-columns:unset;
+    gap:4px;
+    padding:12px 8px;
+    border-top:none;
+    border-bottom:none;
+    border-right:1px solid var(--border);
+    background:rgba(17,17,17,0.97);
+    backdrop-filter:blur(12px);
+  }
+
+  .tab{
+    flex-direction:row;
+    justify-content:flex-start;
+    gap:11px;
+    padding:10px 14px;
+    border-radius:var(--rs);
+    font-size:13px;
+    text-transform:none;
+    letter-spacing:0;
+    width:100%;
+  }
+  .ti{font-size:18px;}
+  .tab.on::after{display:none;}
+  .tab.on{background:var(--gold-dim);color:var(--gold);}
+  .tab.on .ti{transform:scale(1.08);}
+
+  /* Pages wrapper — takes all remaining width, scrolls independently */
+  .pages-wrap{
+    flex:1;
+    overflow-y:auto;
+    height:100%;
+  }
+  .pg{width:100%;max-width:100%;margin:0;padding:20px 24px;}
+
+  /* Header */
+  .hdr{max-width:100%;width:100%;}
+
+  /* Modal centered */
+  .modal{align-items:center;}
+  .msheet{border-radius:16px;max-width:520px;max-height:88vh;}
+  @keyframes su{from{opacity:0;transform:scale(0.97);}to{opacity:1;transform:scale(1);}}
+
+  .toast{bottom:28px;}
+  .hero-bal{font-size:40px;}
+  .sgrid{grid-template-columns:repeat(4,1fr);}
+  #pg-dash .cards-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+  #pg-dash .cards-row .card{margin-bottom:0;}
+  .binp{width:130px;}
+  .rbar-lbl{width:100px;}
+}
+
+@media(min-width:1024px){
+  .tabs{width:230px;}
+  .pg{padding:24px 32px;}
+  .hero-bal{font-size:44px;}
+}
+
+@media(min-width:1280px){
+  .pg{padding:28px 40px;}
+  .hero-row{grid-template-columns:repeat(4,1fr);}
+}
+
 /* HEADER */
 .hdr{position:sticky;top:0;z-index:50;background:rgba(17,17,17,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:13px 16px;display:flex;align-items:center;justify-content:space-between;}
+@media(min-width:768px){.hdr{padding:13px 24px;}}
 .hdr-title{font-size:17px;font-weight:700;}
 .hdr-title span{color:var(--gold);}
 .hdr-right{display:flex;align-items:center;gap:10px;}
@@ -219,15 +311,25 @@ button{cursor:pointer;}
 <body>
 
 <!-- HEADER -->
-<header class="hdr">
+<header class="hdr" id="app-hdr">
   <div class="hdr-title">H.<span>Finance</span></div>
   <div class="hdr-right">
     <span class="hdr-cur" id="hdr-cur">KES</span>
     <button class="hdr-btn" onclick="openSettings()">⚙️</button>
   </div>
 </header>
+<div class="app-layout">
 
-<!-- DASHBOARD -->
+<!-- TAB BAR / SIDEBAR -->
+<nav class="tabs">
+  <button class="tab on" data-p="dash" onclick="goTab('dash')"><span class="ti">🏠</span><span>Home</span></button>
+  <button class="tab" data-p="log" onclick="goTab('log')"><span class="ti">✚</span><span>Log</span></button>
+  <button class="tab" data-p="budget" onclick="goTab('budget')"><span class="ti">🎯</span><span>Budget</span></button>
+  <button class="tab" data-p="goals" onclick="goTab('goals')"><span class="ti">⭐</span><span>Goals</span></button>
+  <button class="tab" data-p="reports" onclick="goTab('reports')"><span class="ti">📊</span><span>Reports</span></button>
+</nav>
+
+<div class="pages-wrap">
 <div class="pg on" id="pg-dash">
   <div class="hero">
     <div class="hero-lbl">Net Balance — All Time</div>
@@ -249,6 +351,7 @@ button{cursor:pointer;}
     <div class="ct">This Month's Spending</div>
     <div id="d-cats"></div>
   </div>
+  <div class="cards-row">
   <div class="card">
     <div class="ct" style="display:flex;justify-content:space-between;"><span>Budget Status</span><span style="color:var(--gold);cursor:pointer;" onclick="goTab('budget')">View All →</span></div>
     <div id="d-bud"></div>
@@ -259,6 +362,7 @@ button{cursor:pointer;}
       <div style="font-size:26px;">⭐</div>
     </div>
   </div>
+  </div><!-- /cards-row -->
   <div class="tip"><div class="tip-lbl">💡 Money Tip</div><div class="tip-txt" id="d-tip">Loading...</div></div>
 </div>
 
@@ -374,14 +478,8 @@ button{cursor:pointer;}
   </div>
 </div>
 
-<!-- TAB BAR -->
-<nav class="tabs">
-  <button class="tab on" data-p="dash" onclick="goTab('dash')"><span class="ti">🏠</span><span>Home</span></button>
-  <button class="tab" data-p="log" onclick="goTab('log')"><span class="ti">✚</span><span>Log</span></button>
-  <button class="tab" data-p="budget" onclick="goTab('budget')"><span class="ti">🎯</span><span>Budget</span></button>
-  <button class="tab" data-p="goals" onclick="goTab('goals')"><span class="ti">⭐</span><span>Goals</span></button>
-  <button class="tab" data-p="reports" onclick="goTab('reports')"><span class="ti">📊</span><span>Reports</span></button>
-</nav>
+</div><!-- /pages-wrap -->
+</div><!-- /app-layout -->
 
 <!-- SETTINGS MODAL -->
 <div class="modal" id="modal-settings">
